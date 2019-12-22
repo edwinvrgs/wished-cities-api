@@ -1,10 +1,9 @@
 import { Router } from 'express';
+import v1         from './v1';
 
 const router = Router();
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('Hello world from users route');
-});
+router.use('/v1', v1);
 
 export default router;
