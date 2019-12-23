@@ -9,6 +9,10 @@ const defaultDBConfig = {
 };
 
 export const DB_CONFIG = {
+  test: {
+    ...defaultDBConfig,
+    database: 'db',
+  },
   development: {
     ...defaultDBConfig,
     // Docker
