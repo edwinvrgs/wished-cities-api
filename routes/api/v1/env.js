@@ -1,8 +1,8 @@
 export const ENV = 'development';
 
 const defaultDBConfig = {
-  user: 'root',
-  password: 'root',
+  user: 'edvargas',
+  password: 'edvargas',
   host: 'localhost',
   port: 5432,
   database: 'wished-cities',
