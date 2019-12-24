@@ -5,13 +5,13 @@
   "scripts": {
     "start": "nodemon -r esm ./bin/www",
     "db:prepare": "npm run migrate:reset && npm run seed:reset",
-    "migrate": "npx sequelize-cli db:migrate",
-    "migrate:revert": "npx sequelize-cli db:migrate:undo:all",
+    "migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate",
+    "migrate:revert": "cross-env NODE_ENV=test npx sequelize-cli db:migrate:undo:all",
     "migrate:reset": "npm run migrate:revert && npm run migrate",
-    "seed": "npx sequelize-cli db:seed",
-    "seed:revert": "npx sequelize-cli db:seed:undo:all",
+    "seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed",
+    "seed:revert": "cross-env NODE_ENV=test npx sequelize-cli db:seed:undo:all",
     "seed:reset": "npm run seed:revert && npm run seed",
-    "pretest": "cross-env NODE_ENV=test npm run migrate:reset && npm run seed:reset",
+    "pretest": "npm run migrate:reset && npm run seed:reset",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
+    "cross-env": "^6.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-node": "^10.0.0",
     "jest": "^24.9.0",
