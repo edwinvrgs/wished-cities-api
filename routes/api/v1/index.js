@@ -1,7 +1,9 @@
 import { Router } from 'express';
+import { Op }     from 'sequelize';
 
-import { DB } from './constants';
+import models from '../../../database/models';
 
+const { Country, City, Bucket } = models;
 const router = Router();
 
 router.get('/', function (req, res, next) {
@@ -10,26 +12,28 @@ router.get('/', function (req, res, next) {
 
 router.get('/countries', async function (req, res, next) {
   try {
-    const query = `SELECT * FROM country`;
-    const result = await DB.any(query);
-
+    const result = await Country.findAll();
     res.send(result);
   } catch (e) {
+    console.log(e);
     res.status(500);
     res.send(e);
   }
 });
 
-router.get('/cities/:country_id', async function (req, res, next) {
+router.get('/cities/:countryId', async function (req, res, next) {
   try {
-    const { country_id } = req.params;
-    const query = `SELECT * FROM city
-      WHERE id_country = ${country_id}`;
+    const { countryId } = req.params;
 
-    const result = await DB.any(query);
+    const result = await City.findAll({
+      where: {
+        countryId,
+      },
+    });
 
     res.send(result);
   } catch (e) {
+    console.log(e);
     res.status(500);
     res.send(e);
   }
@@ -37,26 +41,34 @@ router.get('/cities/:country_id', async function (req, res, next) {
 
 router.post('/save-bucket', async function (req, res, next) {
   try {
-    const { country, cities, cost, owner } = req.body;
+    const { country, cities: citiesIds, cost, owner } = req.body;
 
-    // Create the bucket
-    const query = `INSERT INTO bucket (owner, id_country, cost)
-    VALUES ('${owner}', ${country}, ${cost}) RETURNING id;`;
+    const bucket = await Bucket.create({
+      countryId: country,
+      cost,
+      owner,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
 
-    const [result] = await DB.any(query);
+    const { id } = bucket.get({ plain: true });
 
-    const { id } = result;
+    const cities = await City.findAll({
+      where: {
+        id: {
+          [Op.or]: citiesIds,
+        },
+      },
+    });
 
-    // Link all the cities selected to the bucket
-    const queries = cities.map(cityId => (
-      `INSERT INTO bucket_city (id_city, id_bucket)
-    VALUES (${cityId}, ${id});`
-    )).join(';');
+    console.log({ cities });
 
-    await DB.multi(queries);
+    await bucket.setCities(cities,
+      { through: { created_at: new Date(), updated_at: new Date() } });
 
     res.send({ id });
   } catch (e) {
+    console.log(e);
     res.status(500);
     res.send(e);
   }
