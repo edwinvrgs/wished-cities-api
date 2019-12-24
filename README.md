@@ -1,20 +1,23 @@
 ## API for Wished Cities app
 
 ### Notes
-- API versioning with separate config and environments for each version.
+- API versioning.
+- PostgreSQL as database.
 - Sequelize for database management.
 - Tests with `jest`.
+- A Dockerfile for easy dockerizing.
 
 ### Project structure
 - All the basic structure of the express boilerplate.
-- In the `routes` folder an `api` folder,
-    - inside of it one folder per version (eg. `v1`),
-    - inside of each version folder an `env` file and an `constants` file.
-- A database folder with a `sql` folder inside (containing all the sql files) and a `index.js` file containing all the functions required to setup the database.
+- In the `routes` folder an `api` folder, inside of it one folder per version (eg. `v1`).
+- A database folder with all the related configuration.
 
 ### Try it!
 In your local:
 - Clone the project
-- `npm start`
+- Create 2 databases in PostgreSQL (one for development and one for testing).
+- Create a .env file (you can use the .env.example as a reference).
+- `npm install`. Install dependencies.
+- `npm run db:prepare`. Run migrations and seeders.
+- `npm start`... If you want to test: `npm test`.
 - Play around!
-- If you want to test: `npm test`
