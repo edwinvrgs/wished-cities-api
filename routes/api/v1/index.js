@@ -13,11 +13,10 @@ router.get('/', function (req, res, next) {
 router.get('/countries', async function (req, res, next) {
   try {
     const result = await Country.findAll();
-    res.send(result);
+    return res.status(200).send(result);
   } catch (e) {
     console.log(e);
-    res.status(500);
-    res.send(e);
+    return res.status(500).json({ error: e.message });
   }
 });
 
@@ -31,11 +30,10 @@ router.get('/cities/:countryId', async function (req, res, next) {
       },
     });
 
-    res.send(result);
+    return res.status(200).send(result);
   } catch (e) {
     console.log(e);
-    res.status(500);
-    res.send(e);
+    return res.status(500).json({ error: e.message });
   }
 });
 
@@ -51,8 +49,6 @@ router.post('/save-bucket', async function (req, res, next) {
       updated_at: new Date(),
     });
 
-    const { id } = bucket.get({ plain: true });
-
     const cities = await City.findAll({
       where: {
         id: {
@@ -61,16 +57,13 @@ router.post('/save-bucket', async function (req, res, next) {
       },
     });
 
-    console.log({ cities });
-
     await bucket.setCities(cities,
       { through: { created_at: new Date(), updated_at: new Date() } });
 
-    res.send({ id });
+    return res.status(200).send(bucket);
   } catch (e) {
     console.log(e);
-    res.status(500);
-    res.send(e);
+    return res.status(500).json({ error: e.message });
   }
 });
 
