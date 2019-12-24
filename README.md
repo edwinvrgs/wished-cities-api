@@ -16,7 +16,7 @@
 In your local:
 - Clone the project
 - Create 2 databases in PostgreSQL (one for development and one for testing).
-- Create a .env file (you can use the .env.example as a reference).
+- Create a .env file (you can use the `.env.example` as a reference).
 - `npm install`. Install dependencies.
 - `npm run db:prepare`. Run migrations and seeders.
 - `npm start`... If you want to test: `npm test`.
