@@ -2,7 +2,7 @@
 
 ### Notes
 - API versioning with separate config and environments for each version.
-- No ORM for database management.
+- Sequelize for database management.
 - Tests with `jest`.
 
 ### Project structure
