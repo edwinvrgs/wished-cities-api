@@ -1,6 +1,6 @@
 ## API for Wished Cities app
 
-### Notes
+### Features
 - API versioning.
 - PostgreSQL as database.
 - Sequelize for database management.
